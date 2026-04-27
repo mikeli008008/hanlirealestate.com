@@ -1817,6 +1817,18 @@ section, .container, .section-header, .hero-content, .hero-btns, .listings-grid,
           <span class="blog-read-more">Read Article <i class="fa-solid fa-arrow-right"></i></span>
         </div>
       </article>
+      <article class="blog-card reveal" style="transition-delay:0.4s" onclick="openModal('blogModal4')">
+        <div class="blog-img" style="background:url('images/img-1.jpg') center/cover no-repeat">
+          <div class="blog-img-inner"></div>
+          <span class="blog-category">Industry Insights</span>
+        </div>
+        <div class="blog-body">
+          <div class="blog-date">April 27, 2026</div>
+          <h3 class="blog-title">The End of Traditional Brokerage: Why Real's Acquisition of RE/MAX Is the Loudest Signal Yet</h3>
+          <p class="blog-excerpt">The real estate industry is at a generational pivot point as Real Brokerage acquires RE/MAX. Here's why the AI era spells the end for the traditional brokerage model.</p>
+          <span class="blog-read-more">Read Article <i class="fa-solid fa-arrow-right"></i></span>
+        </div>
+      </article>
     </div>
   </div>
 </section>
@@ -2361,7 +2373,27 @@ section, .container, .section-header, .hero-content, .hero-btns, .listings-grid,
 </div>
 
 <!-- BLOG ARTICLE MODAL 3 -->
-<div class="modal-overlay blog-modal" id="blogModal3">
+<div class="modal-overlay blog-modal" id="blogModal4">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('blogModal4')">&times;</button>
+    <span class="blog-modal-category">Industry Insights</span>
+    <div class="blog-modal-date">April 27, 2026 &middot; 7 min read</div>
+    <h2 class="blog-modal-title">The End of Traditional Brokerage: Why Real's Acquisition of RE/MAX Is the Loudest Signal Yet</h2>
+    <div class="blog-modal-body">
+      <h3>The Symbolism Is Bigger Than the Numbers</h3>
+      <p>For five decades, RE/MAX has been the archetype of the traditional brokerage. And it just sold itself to a brokerage founded in 2014 that runs entirely in the cloud, built around an AI assistant called Leo. This is a generational pivot.</p>
+      <h3>The AI Era Is Reshaping Brokerages</h3>
+      <p>Compressed margins, AI-native productivity, and the shift in agent expectations are breaking the traditional desk-fee brokerage model. The middle of the market is being squeezed out.</p>
+      <h3>Why Real is the New Standard</h3>
+      <p>Real operates on a transparent split, provides stock ownership, and integrates Leo AI directly into the transaction platform. It's not just a brokerage; it's a tech-enabled platform for the modern agent.</p>
+      <hr class="blog-modal-divider">
+      <div class="blog-modal-cta">
+        <p>Ready to move your business to the AI era?</p>
+        <button class="btn-primary" onclick="closeModal('blogModal4'); openModal('consultModal');">Reach Out to Han Li</button>
+      </div>
+    </div>
+  </div>
+</div>
   <div class="modal">
     <button class="modal-close" onclick="closeModal('blogModal3')">&times;</button>
     <span class="blog-modal-category">Lifestyle</span>
