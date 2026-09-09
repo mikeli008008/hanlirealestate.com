@@ -2154,7 +2154,46 @@ section, .container, .section-header, .hero-content, .hero-btns, .listings-grid,
         </div>
       </div>
       <div class="contact-form-wrap reveal-right">
-        <div class="contact-form hs-embed-wrap" id="hs-form-contact" aria-label="Contact Han Li"></div>
+        <form class="contact-form" id="site-contact-form" aria-label="Contact Han Li">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="cf-firstname">First Name</label>
+              <input id="cf-firstname" name="firstname" type="text" placeholder="John" required autocomplete="given-name">
+            </div>
+            <div class="form-group">
+              <label for="cf-lastname">Last Name</label>
+              <input id="cf-lastname" name="lastname" type="text" placeholder="Smith" required autocomplete="family-name">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="cf-email">Email</label>
+              <input id="cf-email" name="email" type="email" placeholder="john@example.com" required autocomplete="email">
+            </div>
+            <div class="form-group">
+              <label for="cf-phone">Phone</label>
+              <input id="cf-phone" name="phone" type="tel" placeholder="(555) 000-0000" autocomplete="tel">
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="cf-interest">I'm Interested In</label>
+            <select id="cf-interest" name="i_m_interested_in" aria-label="Select your interest" required>
+              <option value="Buying a Home">Buying a Home</option>
+              <option value="Selling My Home">Selling My Home</option>
+              <option value="Investment Properties">Investment Properties</option>
+              <option value="Relocation Services">Relocation Services</option>
+              <option value="Market Analysis">Market Analysis</option>
+              <option value="Joining Real Broker">Joining Real Broker</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="cf-message">Message</label>
+            <textarea id="cf-message" name="site_message" placeholder="Tell me about your real estate goals..."></textarea>
+          </div>
+          <button type="submit" class="btn-submit" id="cf-submit">Send Message</button>
+          <p id="cf-status" style="display:none;margin:0.5rem 0 0;font-size:0.9rem;color:var(--warm-gray);"></p>
+        </form>
       </div>
     </div>
   </div>
@@ -2642,85 +2681,14 @@ document.querySelectorAll('.listing-favorite').forEach(function(btn){
 (function(){
   var PORTAL='343626350';
   var REGION='na3';
+  var CONTACT_FORM_ID='132ef2c8-d3ab-4361-bf00-04a7ecb8ba5a';
+
   function interestLooksRecruit(val){
     if(!val) return false;
-    var s=String(val).toLowerCase();
-    return s.indexOf('joining real broker')!==-1 || s.indexOf('recruit')!==-1;
+    return String(val).toLowerCase().indexOf('joining real broker')!==-1;
   }
-  function findInterestSelect(formEl){
-    if(!formEl) return null;
-    var selects=formEl.querySelectorAll('select');
-    for(var i=0;i<selects.length;i++){
-      var sel=selects[i];
-      var name=(sel.getAttribute('name')||'').toLowerCase();
-      if(name.indexOf('contact_type')!==-1) continue;
-      var id=sel.id||'';
-      var lab=formEl.querySelector('label[for="'+id+'"]');
-      var labText=lab?lab.textContent.toLowerCase():'';
-      if(name.indexOf('interest')!==-1 || labText.indexOf('interested')!==-1 || labText.indexOf('interest')!==-1){
-        return sel;
-      }
-      var opts=sel.options||[];
-      for(var j=0;j<opts.length;j++){
-        if(String(opts[j].text||opts[j].value).toLowerCase().indexOf('joining real broker')!==-1) return sel;
-      }
-    }
-    return null;
-  }
-  function contactTypeFields(formEl){
-    return formEl.querySelectorAll('select[name="contact_type"], input[name="contact_type"], select[name*="contact_type"], input[name*="contact_type"]');
-  }
-  function setContactType(formEl, type){
-    if(!formEl) return;
-    var want=String(type).toLowerCase();
-    var fields=contactTypeFields(formEl);
-    for(var i=0;i<fields.length;i++){
-      var el=fields[i];
-      if(el.tagName==='SELECT'){
-        var matched='';
-        for(var j=0;j<el.options.length;j++){
-          var ov=String(el.options[j].value||'').toLowerCase();
-          var ot=String(el.options[j].text||'').toLowerCase();
-          if(ov===want || ot===want){ matched=el.options[j].value; break; }
-        }
-        if(matched!=='') el.value=matched;
-        else el.value=want;
-      } else {
-        el.value=want;
-      }
-      try{ el.dispatchEvent(new Event('input',{bubbles:true})); }catch(e){}
-      try{ el.dispatchEvent(new Event('change',{bubbles:true})); }catch(e){}
-    }
-  }
-  function hideContactType(formEl){
-    if(!formEl) return;
-    var fields=contactTypeFields(formEl);
-    for(var i=0;i<fields.length;i++){
-      var wrap=fields[i].closest('.hs-form-field')||fields[i].closest('.hs_contact_type')||fields[i].parentElement;
-      if(wrap) wrap.style.display='none';
-    }
-  }
-  function syncContactTypeFromInterest(formEl){
-    var sel=findInterestSelect(formEl);
-    var val='';
-    if(sel){
-      val=sel.value||'';
-      if(sel.selectedIndex>=0 && sel.options[sel.selectedIndex]){
-        val=sel.options[sel.selectedIndex].text||sel.options[sel.selectedIndex].value||val;
-      }
-    }
-    setContactType(formEl, interestLooksRecruit(val)?'recruit':'client');
-  }
-  function wireContactMapping(formEl){
-    hideContactType(formEl);
-    syncContactTypeFromInterest(formEl);
-    var sel=findInterestSelect(formEl);
-    if(sel && !sel._hlWired){
-      sel._hlWired=true;
-      sel.addEventListener('change', function(){ syncContactTypeFromInterest(formEl); });
-    }
-  }
-  function createForm(target, formId, opts){
+
+  function createEmbed(target, formId, opts){
     opts=opts||{};
     if(typeof hbspt==='undefined' || !hbspt.forms) return;
     hbspt.forms.create({
@@ -2728,30 +2696,72 @@ document.querySelectorAll('.listing-favorite').forEach(function(btn){
       portalId: PORTAL,
       formId: formId,
       target: '#'+target,
-      onFormReady: function($form){
-        var el=$form && $form.length ? $form[0] : document.getElementById(target);
-        if(opts.mapInterest) wireContactMapping(el);
-        else hideContactType(el);
-      },
-      onBeforeFormSubmit: function($form){
-        var el=$form && $form.length ? $form[0] : document.getElementById(target);
-        if(opts.mapInterest) syncContactTypeFromInterest(el);
-      },
       onFormSubmitted: function(){
         if(opts.closeModalId) closeModal(opts.closeModalId);
         showToast(opts.toast||'Message sent successfully!');
       }
     });
   }
-  function boot(){
-    createForm('hs-form-contact','132ef2c8-d3ab-4361-bf00-04a7ecb8ba5a',{mapInterest:true,toast:'Message sent successfully!'});
-    createForm('hs-form-consult','9b0151ad-74eb-4764-b6d0-fb257c3435d9',{closeModalId:'consultModal',toast:'Consultation request sent!'});
-    createForm('hs-form-join','89d7a327-3fdf-4e3f-aeb6-69d4c9c4f2e7',{closeModalId:'joinModal',toast:'Application submitted! Han will be in touch soon.'});
+
+  function bootEmbeds(){
+    createEmbed('hs-form-consult','9b0151ad-74eb-4764-b6d0-fb257c3435d9',{closeModalId:'consultModal',toast:'Consultation request sent!'});
+    createEmbed('hs-form-join','89d7a327-3fdf-4e3f-aeb6-69d4c9c4f2e7',{closeModalId:'joinModal',toast:'Application submitted! Han will be in touch soon.'});
   }
-  if(window.hbspt && hbspt.forms) boot();
+
+  function field(name, value){
+    return {objectTypeId:'0-1', name:name, value:value==null?'':String(value)};
+  }
+
+  function wireNativeContact(){
+    var form=document.getElementById('site-contact-form');
+    if(!form || form._hlWired) return;
+    form._hlWired=true;
+    var status=document.getElementById('cf-status');
+    var btn=document.getElementById('cf-submit');
+    form.addEventListener('submit', function(e){
+      e.preventDefault();
+      var interest=(document.getElementById('cf-interest')||{}).value||'';
+      var contactType=interestLooksRecruit(interest)?'recruit':'client';
+      var payload={
+        fields:[
+          field('firstname', (document.getElementById('cf-firstname')||{}).value),
+          field('lastname', (document.getElementById('cf-lastname')||{}).value),
+          field('email', (document.getElementById('cf-email')||{}).value),
+          field('phone', (document.getElementById('cf-phone')||{}).value),
+          field('i_m_interested_in', interest),
+          field('site_message', (document.getElementById('cf-message')||{}).value),
+          field('contact_type', contactType)
+        ],
+        context:{
+          pageUri: window.location.href,
+          pageName: document.title||'Han Li Real Estate'
+        }
+      };
+      if(btn){ btn.disabled=true; btn.textContent='Sending…'; }
+      if(status){ status.style.display='block'; status.textContent='Sending…'; }
+      fetch('https://api.hsforms.com/submissions/v3/integration/submit/'+PORTAL+'/'+CONTACT_FORM_ID,{
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify(payload)
+      }).then(function(res){
+        if(!res.ok) return res.text().then(function(t){ throw new Error(t||('HTTP '+res.status)); });
+        form.reset();
+        showToast('Message sent successfully!');
+        if(status){ status.textContent='Sent — thanks, Han will be in touch.'; }
+      }).catch(function(){
+        if(status){ status.textContent='Could not send. Please email han@realbroker.com or try again.'; }
+        showToast('Could not send — please try again.');
+      }).finally(function(){
+        if(btn){ btn.disabled=false; btn.textContent='Send Message'; }
+      });
+    });
+  }
+
+  wireNativeContact();
+  if(window.hbspt && hbspt.forms) bootEmbeds();
   else {
     var t=setInterval(function(){
-      if(window.hbspt && hbspt.forms){ clearInterval(t); boot(); }
+      if(window.hbspt && hbspt.forms){ clearInterval(t); bootEmbeds(); }
     },50);
     setTimeout(function(){ clearInterval(t); },10000);
   }
