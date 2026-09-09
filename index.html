@@ -2653,41 +2653,63 @@ document.querySelectorAll('.listing-favorite').forEach(function(btn){
     for(var i=0;i<selects.length;i++){
       var sel=selects[i];
       var name=(sel.getAttribute('name')||'').toLowerCase();
+      if(name.indexOf('contact_type')!==-1) continue;
       var id=sel.id||'';
       var lab=formEl.querySelector('label[for="'+id+'"]');
       var labText=lab?lab.textContent.toLowerCase():'';
       if(name.indexOf('interest')!==-1 || labText.indexOf('interested')!==-1 || labText.indexOf('interest')!==-1){
         return sel;
       }
-      // fallback: select that contains Joining Real Broker option
       var opts=sel.options||[];
       for(var j=0;j<opts.length;j++){
-        if(String(opts[j].text||opts[j].value).indexOf('Joining Real Broker')!==-1) return sel;
+        if(String(opts[j].text||opts[j].value).toLowerCase().indexOf('joining real broker')!==-1) return sel;
       }
     }
     return null;
   }
+  function contactTypeFields(formEl){
+    return formEl.querySelectorAll('select[name="contact_type"], input[name="contact_type"], select[name*="contact_type"], input[name*="contact_type"]');
+  }
   function setContactType(formEl, type){
     if(!formEl) return;
-    var fields=formEl.querySelectorAll('select[name="contact_type"], input[name="contact_type"]');
+    var want=String(type).toLowerCase();
+    var fields=contactTypeFields(formEl);
     for(var i=0;i<fields.length;i++){
-      fields[i].value=type;
-      try{ fields[i].dispatchEvent(new Event('change',{bubbles:true})); }catch(e){}
-      try{ fields[i].dispatchEvent(new Event('input',{bubbles:true})); }catch(e){}
+      var el=fields[i];
+      if(el.tagName==='SELECT'){
+        var matched='';
+        for(var j=0;j<el.options.length;j++){
+          var ov=String(el.options[j].value||'').toLowerCase();
+          var ot=String(el.options[j].text||'').toLowerCase();
+          if(ov===want || ot===want){ matched=el.options[j].value; break; }
+        }
+        if(matched!=='') el.value=matched;
+        else el.value=want;
+      } else {
+        el.value=want;
+      }
+      try{ el.dispatchEvent(new Event('input',{bubbles:true})); }catch(e){}
+      try{ el.dispatchEvent(new Event('change',{bubbles:true})); }catch(e){}
     }
   }
   function hideContactType(formEl){
     if(!formEl) return;
-    var fields=formEl.querySelectorAll('[name="contact_type"]');
+    var fields=contactTypeFields(formEl);
     for(var i=0;i<fields.length;i++){
-      var wrap=fields[i].closest('.hs-form-field')||fields[i].parentElement;
+      var wrap=fields[i].closest('.hs-form-field')||fields[i].closest('.hs_contact_type')||fields[i].parentElement;
       if(wrap) wrap.style.display='none';
     }
   }
   function syncContactTypeFromInterest(formEl){
     var sel=findInterestSelect(formEl);
-    var val=sel?(sel.value||(sel.options[sel.selectedIndex]&&sel.options[sel.selectedIndex].text)):'';
-    setContactType(formEl, interestLooksRecruit(val)?'Recruit':'Client');
+    var val='';
+    if(sel){
+      val=sel.value||'';
+      if(sel.selectedIndex>=0 && sel.options[sel.selectedIndex]){
+        val=sel.options[sel.selectedIndex].text||sel.options[sel.selectedIndex].value||val;
+      }
+    }
+    setContactType(formEl, interestLooksRecruit(val)?'recruit':'client');
   }
   function wireContactMapping(formEl){
     hideContactType(formEl);
