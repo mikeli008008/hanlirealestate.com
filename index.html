@@ -1191,6 +1191,25 @@ section, .container, .section-header, .hero-content, .hero-btns, .listings-grid,
 .join-grid, .join-content, .contact-grid, .calc-grid, .footer-grid {
   pointer-events: auto;
 }
+
+/* HubSpot form embeds */
+.hs-embed-wrap { width: 100%; }
+.hs-embed-wrap .hs-form-field { margin-bottom: 1rem; }
+.hs-embed-wrap label { display:block; font-size:0.78rem; letter-spacing:0.08em; text-transform:uppercase; color:var(--warm-gray); margin-bottom:0.4rem; font-family:'DM Sans',sans-serif; }
+.hs-embed-wrap .hs-input, .hs-embed-wrap input, .hs-embed-wrap select, .hs-embed-wrap textarea {
+  width:100%; padding:0.85rem 1rem; border:1px solid var(--sand); background:#fff; border-radius:2px;
+  font-family:'DM Sans',sans-serif; font-size:0.95rem; color:var(--espresso);
+}
+.hs-embed-wrap textarea { min-height:110px; resize:vertical; }
+.hs-embed-wrap .hs-button, .hs-embed-wrap input[type="submit"] {
+  width:100%; margin-top:0.5rem; padding:1rem 1.5rem; border:none; cursor:pointer;
+  background:var(--terracotta); color:#fff; font-family:'DM Sans',sans-serif;
+  letter-spacing:0.12em; text-transform:uppercase; font-size:0.8rem;
+}
+.hs-embed-wrap .hs-button:hover, .hs-embed-wrap input[type="submit"]:hover { opacity:0.92; }
+.hs-embed-wrap .hs-error-msgs { color:#b00020; font-size:0.8rem; list-style:none; padding:0; margin:0.3rem 0 0; }
+.hs-embed-wrap fieldset { max-width:100% !important; }
+.modal .hs-embed-wrap { margin-top:0.5rem; }
 </style>
 
 <!-- Structured Data - JSON-LD -->
@@ -2135,45 +2154,7 @@ section, .container, .section-header, .hero-content, .hero-btns, .listings-grid,
         </div>
       </div>
       <div class="contact-form-wrap reveal-right">
-        <form class="contact-form" aria-label="Contact Han Li" onsubmit="event.preventDefault(); showFormSuccess(this);">
-          <div class="form-row">
-            <div class="form-group">
-              <label>First Name</label>
-              <input type="text" placeholder="John" required>
-            </div>
-            <div class="form-group">
-              <label>Last Name</label>
-              <input type="text" placeholder="Smith" required>
-            </div>
-          </div>
-          <div class="form-row">
-            <div class="form-group">
-              <label>Email</label>
-              <input type="email" placeholder="john@example.com" required>
-            </div>
-            <div class="form-group">
-              <label>Phone</label>
-              <input type="tel" placeholder="(555) 000-0000">
-            </div>
-          </div>
-          <div class="form-group">
-            <label>I'm Interested In</label>
-            <select aria-label="Select your interest">
-              <option>Buying a Home</option>
-              <option>Selling My Home</option>
-              <option>Investment Properties</option>
-              <option>Relocation Services</option>
-              <option>Market Analysis</option>
-              <option>Joining Real Broker</option>
-              <option>Other</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label>Message</label>
-            <textarea placeholder="Tell me about your real estate goals..."></textarea>
-          </div>
-          <button type="submit" class="btn-submit">Send Message</button>
-        </form>
+        <div class="contact-form hs-embed-wrap" id="hs-form-contact" aria-label="Contact Han Li"></div>
       </div>
     </div>
   </div>
@@ -2249,29 +2230,7 @@ section, .container, .section-header, .hero-content, .hero-btns, .listings-grid,
     <button class="modal-close" onclick="closeModal('consultModal')">&times;</button>
     <h2>Book a Consultation</h2>
     <p>Let's discuss your real estate goals. Fill out the form below and I'll get back to you within 24 hours.</p>
-    <form onsubmit="event.preventDefault(); closeModal('consultModal'); showToast('Consultation request sent!');">
-      <div class="form-group">
-        <label>Full Name</label>
-        <input type="text" placeholder="Your name" required>
-      </div>
-      <div class="form-group">
-        <label>Email</label>
-        <input type="email" placeholder="your@email.com" required>
-      </div>
-      <div class="form-group">
-        <label>Phone</label>
-        <input type="tel" placeholder="(555) 000-0000">
-      </div>
-      <div class="form-group">
-        <label>Preferred Date & Time</label>
-        <input type="text" placeholder="e.g. March 25, 2pm">
-      </div>
-      <div class="form-group">
-        <label>What are you looking for?</label>
-        <textarea placeholder="Budget, location preferences, timeline..." rows="3"></textarea>
-      </div>
-      <button type="submit" class="btn-submit">Request Consultation</button>
-    </form>
+    <div class="hs-embed-wrap" id="hs-form-consult"></div>
   </div>
 </div>
 
@@ -2281,35 +2240,7 @@ section, .container, .section-header, .hero-content, .hero-btns, .listings-grid,
     <button class="modal-close" onclick="closeModal('joinModal')">&times;</button>
     <h2>Join Real Broker</h2>
     <p>Interested in elevating your career? Let's chat about how Real Broker can help you earn more and grow faster.</p>
-    <form onsubmit="event.preventDefault(); closeModal('joinModal'); showToast('Application submitted! Han will be in touch soon.');">
-      <div class="form-group">
-        <label>Full Name</label>
-        <input type="text" placeholder="Your name" required>
-      </div>
-      <div class="form-group">
-        <label>Email</label>
-        <input type="email" placeholder="your@email.com" required>
-      </div>
-      <div class="form-group">
-        <label>Current Brokerage</label>
-        <input type="text" placeholder="Where you're currently licensed">
-      </div>
-      <div class="form-group">
-        <label>Years of Experience</label>
-        <select>
-          <option>Less than 1 year</option>
-          <option>1-3 years</option>
-          <option>3-5 years</option>
-          <option>5-10 years</option>
-          <option>10+ years</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label>What interests you about Real Broker?</label>
-        <textarea placeholder="Tell me what you're looking for..." rows="3"></textarea>
-      </div>
-      <button type="submit" class="btn-submit">Submit Application</button>
-    </form>
+    <div class="hs-embed-wrap" id="hs-form-join"></div>
   </div>
 </div>
 
@@ -2705,5 +2636,105 @@ document.querySelectorAll('.listing-favorite').forEach(function(btn){
 })();
 
 </script>
+
+<script charset="utf-8" type="text/javascript" src="//js.hsforms.net/forms/embed/v2.js"></script>
+<script>
+(function(){
+  var PORTAL='343626350';
+  var REGION='na3';
+  function interestLooksRecruit(val){
+    if(!val) return false;
+    var s=String(val).toLowerCase();
+    return s.indexOf('joining real broker')!==-1 || s.indexOf('recruit')!==-1;
+  }
+  function findInterestSelect(formEl){
+    if(!formEl) return null;
+    var selects=formEl.querySelectorAll('select');
+    for(var i=0;i<selects.length;i++){
+      var sel=selects[i];
+      var name=(sel.getAttribute('name')||'').toLowerCase();
+      var id=sel.id||'';
+      var lab=formEl.querySelector('label[for="'+id+'"]');
+      var labText=lab?lab.textContent.toLowerCase():'';
+      if(name.indexOf('interest')!==-1 || labText.indexOf('interested')!==-1 || labText.indexOf('interest')!==-1){
+        return sel;
+      }
+      // fallback: select that contains Joining Real Broker option
+      var opts=sel.options||[];
+      for(var j=0;j<opts.length;j++){
+        if(String(opts[j].text||opts[j].value).indexOf('Joining Real Broker')!==-1) return sel;
+      }
+    }
+    return null;
+  }
+  function setContactType(formEl, type){
+    if(!formEl) return;
+    var fields=formEl.querySelectorAll('select[name="contact_type"], input[name="contact_type"]');
+    for(var i=0;i<fields.length;i++){
+      fields[i].value=type;
+      try{ fields[i].dispatchEvent(new Event('change',{bubbles:true})); }catch(e){}
+      try{ fields[i].dispatchEvent(new Event('input',{bubbles:true})); }catch(e){}
+    }
+  }
+  function hideContactType(formEl){
+    if(!formEl) return;
+    var fields=formEl.querySelectorAll('[name="contact_type"]');
+    for(var i=0;i<fields.length;i++){
+      var wrap=fields[i].closest('.hs-form-field')||fields[i].parentElement;
+      if(wrap) wrap.style.display='none';
+    }
+  }
+  function syncContactTypeFromInterest(formEl){
+    var sel=findInterestSelect(formEl);
+    var val=sel?(sel.value||(sel.options[sel.selectedIndex]&&sel.options[sel.selectedIndex].text)):'';
+    setContactType(formEl, interestLooksRecruit(val)?'Recruit':'Client');
+  }
+  function wireContactMapping(formEl){
+    hideContactType(formEl);
+    syncContactTypeFromInterest(formEl);
+    var sel=findInterestSelect(formEl);
+    if(sel && !sel._hlWired){
+      sel._hlWired=true;
+      sel.addEventListener('change', function(){ syncContactTypeFromInterest(formEl); });
+    }
+  }
+  function createForm(target, formId, opts){
+    opts=opts||{};
+    if(typeof hbspt==='undefined' || !hbspt.forms) return;
+    hbspt.forms.create({
+      region: REGION,
+      portalId: PORTAL,
+      formId: formId,
+      target: '#'+target,
+      onFormReady: function($form){
+        var el=$form && $form.length ? $form[0] : document.getElementById(target);
+        if(opts.mapInterest) wireContactMapping(el);
+        else hideContactType(el);
+      },
+      onBeforeFormSubmit: function($form){
+        var el=$form && $form.length ? $form[0] : document.getElementById(target);
+        if(opts.mapInterest) syncContactTypeFromInterest(el);
+      },
+      onFormSubmitted: function(){
+        if(opts.closeModalId) closeModal(opts.closeModalId);
+        showToast(opts.toast||'Message sent successfully!');
+      }
+    });
+  }
+  function boot(){
+    createForm('hs-form-contact','132ef2c8-d3ab-4361-bf00-04a7ecb8ba5a',{mapInterest:true,toast:'Message sent successfully!'});
+    createForm('hs-form-consult','9b0151ad-74eb-4764-b6d0-fb257c3435d9',{closeModalId:'consultModal',toast:'Consultation request sent!'});
+    createForm('hs-form-join','89d7a327-3fdf-4e3f-aeb6-69d4c9c4f2e7',{closeModalId:'joinModal',toast:'Application submitted! Han will be in touch soon.'});
+  }
+  if(window.hbspt && hbspt.forms) boot();
+  else {
+    var t=setInterval(function(){
+      if(window.hbspt && hbspt.forms){ clearInterval(t); boot(); }
+    },50);
+    setTimeout(function(){ clearInterval(t); },10000);
+  }
+})();
+</script>
+
 </body>
 </html>
